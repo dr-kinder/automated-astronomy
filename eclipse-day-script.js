@@ -21,7 +21,7 @@ to use appropriate filters when pointing telescope to targets near the Sun.
 // Set trigger times for slews
 sky6Utils.ConvertCalenderToJulianDate(2024,4,8,11,50,0) // Input time to start slew to right calibration field in (YYYY, MM, DD, HH, MM, SS) *local* system time
 t0 = sky6Utils.dOut0   // Save time for right calibration field slew to t1 as Julian date
-sky6Utils.ConvertCalenderToJulianDate(2024,4,8,12,0,00) // Input time to start slew to right calibration field in (YYYY, MM, DD, HH, MM, SS) *local* system time
+sky6Utils.ConvertCalenderToJulianDate(2024,4,8,12,0,0) // Input time to start slew to right calibration field in (YYYY, MM, DD, HH, MM, SS) *local* system time
 t00 = sky6Utils.dOut0   // Save time for right calibration field slew to t1 as Julian date
 sky6Utils.ConvertCalenderToJulianDate(2024,4,8,12,9,30) // Input time to start slew to right calibration field in (YYYY, MM, DD, HH, MM, SS) *local* system time
 t1 = sky6Utils.dOut0   // Save time for right calibration field slew to t1 as Julian date

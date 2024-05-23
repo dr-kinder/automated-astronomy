@@ -3,7 +3,7 @@ var Out="";                      // Create variable to store output strings
 var Mount = sky6RASCOMTele;      // Create mount object that will take slew commands
 var StarChart = sky6StarChart;   // Create skychart object that will be used for calculations of object positions, times, etc.
 
-var TargName = "";  // Set target. Named targets like "Sun", "Jupiter", "Vega" should all work.
+var TargName = "";               // Set target. Named targets like "Sun", "Jupiter", "Vega" should all work.
 
 var StartTime = [];
 var EndTime = [];
