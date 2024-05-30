@@ -23,6 +23,10 @@ var StarChart = sky6StarChart;   // Create skychart object that will be used for
 var Out="";   // Create variable to store output strings
 var err; // Create variable to store error codes
 
+/////////////////////////////////////////////////////////////////////
+///////////// SETUP AUXILIARY FUNCTIONS ///////////////////
+////////////////////////////////////////////////////////////////////
+
 function GetTime(){
     // Gets the current time, returns it as an array of 6 values
     
@@ -45,7 +49,7 @@ function AddTime(Time, Minutes, Seconds){
             NewTime[3] += 1;
         }
         while (NewTime[3] >= 24){
-            NewTime[3] -= 60;
+            NewTime[3] -= 24;
             NewTime[2] += 1;
         }
         sky6Utils.ConvertCalenderToJulianDate(NewTime[0],NewTime[1],NewTime[2],NewTime[3],NewTime[4],NewTime[5]) // Input time to start slew to right calibration field in (YYYY, MM, DD, HH, MM, SS) *local* system time
@@ -53,11 +57,45 @@ function AddTime(Time, Minutes, Seconds){
     
     }
 
+function logOutput(logText){
+	// Auxiliary function to write messages to the JavaScript output window and to a text log file
+		
+		RunJavaScriptOutput.writeLine(logText);
+		TextFile.write(logText);
+		
+		}
+	
+function TimeStampString(){
+// Auxiliary function to write current system time as a string
+
+	StarChart.DocumentProperty(9);
+	sky6Utils.ConvertJulianDateToCalender(StarChart.DocPropOut);
+	return String(sky6Utils.dOut0) + "-" + String(sky6Utils.dOut1) + "-" + String(sky6Utils.dOut2) + " " + String(sky6Utils.dOut3) + ":" + String(sky6Utils.dOut4) + ":" + String(sky6Utils.dOut5);
+	
+	}
+
+function TimeDifference(Start, End){
+	var Output = [End[0] - Start[0], End[1] - Start[1], End[2] - Start[2], End[3] - Start[3], End[4] - Start[4], End[5] - Start[5]]
+	while (Output[5] < 0){
+		Output[5] += 60;
+		Output[4] -= 1;
+	}
+	while (Output[4] < 0){
+		Output[4] += 60;
+		Output[3] -= 1;
+	}
+	while (Output[3] < 0){
+		Output[3] += 24;
+		Output[2] -= 1;
+	}
+	return(Output)
+}
+
 ////////////////////////////////////////////////////////////////////////////
 /////// SET TARGET AND SLEW TRIGGER TIMES //////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 t0 = GetTime(); //gets current time to use for starting program
-t0 = AddTime(t0, 0, 10); //adds 10 seconds to t0, the idea is to wait 10 seconds once the script starts before slewing
+t0 = AddTime(t0, 0, 5); //adds 10 seconds to t0, the idea is to wait 10 seconds once the script starts before slewing
 
 // Set target and offset
 var TargName = "Polaris";  // Set target. Named targets like "Sun", "Jupiter", "Vega" should all work. 
@@ -67,27 +105,6 @@ var EcRAoffset = 0.0;			// Set RA offset for eclipse field (set to 0 for field c
 var EcDecoffset = 0.0;			// Set Dec offset for eclipse field (set to 0 for field centered at target)
 CalRAoffset = CalRAoffset/15;  // Set RA offset for left/right calibration fields in hours
 EcRAoffset = EcRAoffset/15;  // Set RA offset for eclipse field in hours
-
-/////////////////////////////////////////////////////////////////////
-///////////// SETUP AUXILIARY FUNCTIONS ///////////////////
-////////////////////////////////////////////////////////////////////
-
-function logOutput(logText){
-// Auxiliary function to write messages to the JavaScript output window and to a text log file
-	
-	RunJavaScriptOutput.writeLine(logText);
-	TextFile.write(logText);
-	
-	}
-
-function TimeStampString(){
-// Auxiliary function to write current system time as a string
-
-	StarChart.DocumentProperty(9);
-	sky6Utils.ConvertJulianDateToCalender(StarChart.DocPropOut);
-	return String(sky6Utils.dOut0) + "-" + String(sky6Utils.dOut1) + "-" + String(sky6Utils.dOut2) + " " + String(sky6Utils.dOut3) + ":" + String(sky6Utils.dOut4) + ":" + String(sky6Utils.dOut5);
-	
-	}
 
 
 logOutput("Timed slew running.");
@@ -173,7 +190,7 @@ function TimedSlew(){
     StartOfSlew = GetTime();
 	Mount.SlewToRaDec(TargRA, TargDec, TargName);
     EndOfSlew = GetTime();
-    Time2Target1 = [EndOfSlew[0] - StartOfSlew[0], EndOfSlew[1] - StartOfSlew[1], EndOfSlew[2] - StartOfSlew[2], EndOfSlew[3] - StartOfSlew[3], EndOfSlew[4] - StartOfSlew[4], EndOfSlew[5] - StartOfSlew[5]]
+    Time2Target1 = TimeDifference(StartOfSlew, EndOfSlew);
     NextTime = AddTime(EndOfSlew, 0, 5);
 	Out = TimeStampString(); 
 	logOutput("Slew complete at " + Out);
@@ -214,7 +231,7 @@ function TimedSlew(){
     StartOfSlew = GetTime();
 	Mount.SlewToRaDec(TargRA-CalRAoffset, TargDec-CalDecoffset, TargName+"Right");
     EndOfSlew = GetTime();
-    Time2RightField = [EndOfSlew[0] - StartOfSlew[0], EndOfSlew[1] - StartOfSlew[1], EndOfSlew[2] - StartOfSlew[2], EndOfSlew[3] - StartOfSlew[3], EndOfSlew[4] - StartOfSlew[4], EndOfSlew[5] - StartOfSlew[5]]
+    Time2RightField = TimeDifference(StartOfSlew, EndOfSlew);
     NextTime = AddTime(EndOfSlew, 0, 5);
 	Out = TimeStampString(); 
 	logOutput("Slew complete at " + Out);
@@ -238,7 +255,7 @@ function TimedSlew(){
     StartOfSlew = GetTime();
 	Mount.SlewToRaDec(TargRA+EcRAoffset, TargDec+EcDecoffset,TargName+"Eclipse");
     EndOfSlew = GetTime();
-    Time2Target2 = [EndOfSlew[0] - StartOfSlew[0], EndOfSlew[1] - StartOfSlew[1], EndOfSlew[2] - StartOfSlew[2], EndOfSlew[3] - StartOfSlew[3], EndOfSlew[4] - StartOfSlew[4], EndOfSlew[5] - StartOfSlew[5]]
+    Time2Target2 = TimeDifference(StartOfSlew, EndOfSlew);
     NextTime = AddTime(EndOfSlew, 0, 5);
 	Out = TimeStampString(); 
 	logOutput("Slew complete at " + Out);
@@ -263,7 +280,7 @@ function TimedSlew(){
     StartOfSlew = GetTime();
 	Mount.SlewToRaDec(TargRA+CalRAoffset, TargDec+CalDecoffset,TargName+"Left");
     EndOfSlew = GetTime();
-    Time2LeftField = [EndOfSlew[0] - StartOfSlew[0], EndOfSlew[1] - StartOfSlew[1], EndOfSlew[2] - StartOfSlew[2], EndOfSlew[3] - StartOfSlew[3], EndOfSlew[4] - StartOfSlew[4], EndOfSlew[5] - StartOfSlew[5]]
+    Time2LeftField = TimeDifference(StartOfSlew, EndOfSlew);
     NextTime = AddTime(EndOfSlew, 0, 5);
 	Out = TimeStampString(); 
 	logOutput("Slew complete at " + Out);
