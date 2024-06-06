@@ -18,3 +18,8 @@ Descritions of some scripts:
         This script was based on the eclipse day script.
         Instead of setting slew start times for each slew, this script waits for a slew to finish, and then adds 5 seconds before starting the next one.
         At the end of the script, the time taken for each slew is given.
+    MEEMultiSlewandSnap4Corners:
+        This script slews takes a calibration image, and then looks at the moon in a four corner pattern while taking images
+        At the end, another calibration image is taken
+        The goal of this script is to show a possible protocol for eclipse imaging
+        Slew timing capabilities have been added.
