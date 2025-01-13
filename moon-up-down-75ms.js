@@ -3,11 +3,11 @@
 // -----------------------------------------------------------------------------
 // Slewing script for the moon.
 // ----------------------------
-// The script takes 2 sets of images near the moon: above and below,
-// centered on the moon.  It will take 400 frames at 75ms exposures, for a
-// total exposure of 1 minute.  The angle offsets are for a ZWO 1600, with
-// a field of view of 140' x 106' = 2.33° x 1.76°.  The saved files end with
-// the target name and a suffix indicating the pointings.
+// The script takes 2 sets of images near the moon: above and below, centered on
+// the moon.  It will take 200 frames at 75ms exposures at each location, for a
+// total exposure of 30 seconds.  The angle offsets are for a ZWO 1600, with a
+// field of view of 140' x 106' = 2.33° x 1.76°.  The saved files end with the
+// target name and a suffix indicating the pointings.
 // ----------------------------------------------------------------------------- 
 // BEFORE RUNNING: SET THE DIRECTORY/FOLDER WHERE FILES WILL BE SAVED!
 // ----------------------------------------------------------------------------- 
@@ -15,12 +15,12 @@
 // -----------------------------------------------------------------------------
 // Set up the box parameters.
 // ----------------------------------------------------------------------------- 
-var TargetName = "Moon";        // Identify target for TheSkyX.
+var TargetName = "Moon";            // Identify target for TheSkyX.
 var DataName = "moon-up-down-75ms"; // Give the output files a logical name.
-var RAOffset = 0.8;             // SET RA OFFSET in degrees.
-var DecOffset = 0.8;            // SET Dec OFFSET in degrees.
-RAOffset = RAOffset / 15;       // Convert to hours.
-DecOffset = DecOffset;          // Degrees remain the same.
+var RAOffset = 0.8;                 // SET RA OFFSET in degrees.
+var DecOffset = 0.8;                // SET Dec OFFSET in degrees.
+RAOffset = RAOffset / 15;           // Convert to hours.
+DecOffset = DecOffset;              // Degrees remain the same.
 
 // -----------------------------------------------------------------------------
 // Set up the camera.
@@ -30,7 +30,7 @@ var Mount = sky6RASCOMTele;     // From TheSkyX: don't change.
 var Sky6Object = sky6StarChart; // From TheSkyX: don't change.
 var ExposureDelay = 0.001;      // SET the delay between exposures in seconds.
 var ExposureTime = 0.075;       // SET the EXPOSURE in seconds (75 ms).
-var FrameCount = 400;           // SET the FRAMECOUNT (number of images).
+var FrameCount = 200;           // SET the FRAMECOUNT (number of images).
 
 // -----------------------------------------------------------------------------
 // Write to the JavaScript output window and a text log file

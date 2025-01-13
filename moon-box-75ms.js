@@ -4,10 +4,10 @@
 // Slewing script for the moon.
 // ----------------------------
 // The script takes 4 sets of images in a box around the moon.  The box is
-// centered on the moon.  It will take 200 frames at 75ms exposures, for a
-// total exposure of 1 minute.  The angle offsets are for a ZWO 1600, with
-// a field of view of 140' x 106' = 2.33° x 1.76°.  The saved files end with
-// the target name and a suffix indicating the pointings.
+// centered on the moon.  It will take 100 frames at 75ms exposures at each
+// location, for a total exposure of 30 seconds.  The angle offsets are for a
+// ZWO 1600, with a field of view of 140' x 106' = 2.33° x 1.76°.  The saved
+// files end with the target name and a suffix indicating the pointings.
 // ----------------------------------------------------------------------------- 
 // BEFORE RUNNING: SET THE DIRECTORY/FOLDER WHERE FILES WILL BE SAVED!
 // ----------------------------------------------------------------------------- 
@@ -30,7 +30,7 @@ var Mount = sky6RASCOMTele;     // From TheSkyX: don't change.
 var Sky6Object = sky6StarChart; // From TheSkyX: don't change.
 var ExposureTime = 0.075;       // SET the EXPOSURE in seconds (75 ms).
 var ExposureDelay = 0.001;      // SET the delay between exposures in seconds.
-var FrameCount = 200;           // SET the FRAMECOUNT (number of images).
+var FrameCount = 100;           // SET the FRAMECOUNT (number of images).
 
 // -----------------------------------------------------------------------------
 // Write to the JavaScript output window and a text log file
